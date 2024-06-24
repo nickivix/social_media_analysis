@@ -1,0 +1,29 @@
+data:
+  raw_data_path: "data/raw/instagram_posts.csv"
+  processed_data_path: "data/processed/"
+  test_size: 0.3
+  validation_size: 0.15
+
+model:
+  input_shape: 3
+  gru_layers:
+    - units: 128
+      activation: "relu"
+      return_sequences: True
+    - units: 64
+      activation: "relu"
+      return_sequences: False
+  dropout_rate: 0.2
+  output_activation: "sigmoid"
+  optimizer: "adam"
+  learning_rate: 0.001
+  loss: "binary_crossentropy"
+  metrics: ["accuracy"]
+
+training:
+  epochs: 50
+  batch_size: 32
+  save_model_path: "results/models/model.h5"
+
+instagram:
+  post_count: 50

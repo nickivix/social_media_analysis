@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <form method="post" action="{{ url_for('existing_data') }}">
+        <label><input type="checkbox" name="metrics" value="likes" {% if 'likes' in selected_metrics %}checked{% endif %}> лайки</label>
+        <label><input type="checkbox" name="metrics" value="comments" {% if 'comments' in selected_metrics %}checked{% endif %}> комментарі</label>
+        <label><input type="checkbox" name="metrics" value="views" {% if 'views' in selected_metrics %}checked{% endif %}> перегляди (якщо існують)</label>
+        <button type="submit">Результат</button>
+    </form>
+    {% if plot_path %}
+        <img src="{{ url_for('plot_histogram_png') }}" alt="Histogram Plot">
+    {% endif %}
+    <div>
+        <h2>Топ 10 Хештегів</h2>
+        <ul>
+            {% for hashtag, count in hashtags.items() %}
+                <li>{{ hashtag }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h2>Топ 10 слів у описі</h2>
+        <ul>
+            {% for word, count in words.items() %}
+                <li>{{ word }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <h2>Визначити кількість лайків на майбутньому пості</h2>
+    <form method="post" action="{{ url_for('predict_popularity') }}">
+        <label for="time_of_day">Час (0-23):</label>
+        <input type="text" id="time_of_day" name="time_of_day" required>
+        <label for="hashtags">Хештег:</label>
+        <input type="text" id="hashtags" name="hashtags" required>
+        <label for="description">Опис:</label>
+        <input type="text" id="description" name="description" required>
+        <label for="last_5_likes">Кількість лайків на ваших останніх 5 постах:</label>
+        <input type="text" id="last_5_likes" name="last_5_likes" required>
+        <button type="submit">Отримати результат</button>
+    </form>
+    <a href="{{ url_for('index') }}">Назад</a>
+</body>
+</html>
